@@ -1,0 +1,19 @@
+# Build artifacts
+/bin/
+/dist/
+/devarchitect
+/devarchitect-*
+
+# Go
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# OS
+.DS_Store
+
+# Editors
+.idea/
+.vscode/
+*.swp
