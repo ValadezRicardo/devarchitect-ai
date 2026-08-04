@@ -9,6 +9,7 @@
 - [`internal/scoring`](#internalscoring)
 - [`internal/analyzer`](#internalanalyzer)
 - [`internal/report`](#internalreport)
+- [`internal/version`](#internalversion)
 - [`internal/config`](#internalconfig)
 - [`internal/policy`](#internalpolicy-accepted-design-not-yet-implemented) *(accepted design)*
 - [`cmd/devarchitect`](#cmddevarchitect)
@@ -36,6 +37,7 @@ that role.
 | `internal/scoring` | `internal/domain` | `internal/detector`, `internal/rules`, `internal/analyzer`, `internal/report` |
 | `internal/analyzer` | `internal/domain`, `internal/scoring` | `internal/detector`, `internal/rules`, `internal/report` (it receives a `[]domain.Rule` and a `domain.Repository` as parameters — it must never construct them itself) |
 | `internal/report` | `internal/domain` | `internal/detector`, `internal/rules`, `internal/scoring`, `internal/analyzer` |
+| `internal/version` | (nothing internal) | Every other `internal/*` package — it exists only to be imported, never to import |
 | `internal/config` | `internal/domain` (reserved; design Accepted via [RFC-001](../rfc/RFC-001-engineering-policies.md), not yet implemented) | Everything else |
 | `internal/policy` *(accepted design, not yet implemented)* | `internal/domain`, `internal/config` — per [RFC-001](../rfc/RFC-001-engineering-policies.md), Accepted 2026-08-04 | `internal/detector`, `internal/rules`, `internal/analyzer`, `internal/report` |
 | `cmd/devarchitect` | Everything | Nothing — this is the only package allowed to import the whole graph |
@@ -218,6 +220,26 @@ compute anything — every number it prints must already exist on the
 **Example:** `RenderJSON` is a five-line function
 (`json.NewEncoder(w).Encode(report)` plus indentation) precisely because
 all the actual work — deciding what the numbers are — happened upstream.
+
+## `internal/version`
+
+**Purpose:** The single source of truth for DevArchitect AI's own
+release version — one constant, nothing else.
+
+**Responsibilities:**
+
+- Declare `Version`, read by `cmd/devarchitect` for `devarchitect
+  version` and passed through to `AnalysisReport.Metadata.ToolVersion`.
+
+**Allowed dependencies:** none.
+
+**Forbidden dependencies:** everything — a package whose entire purpose
+is being a stable, dependency-free value has no reason to import
+anything, internal or standard library.
+
+**Example:** bumping a release's version is a one-line change in
+`internal/version/version.go`, never a multi-file find-and-replace — see
+[CLAUDE.md's Release Process](../../CLAUDE.md#release-process).
 
 ## `internal/config`
 

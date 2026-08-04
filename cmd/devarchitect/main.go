@@ -12,11 +12,8 @@ import (
 	"github.com/ValadezRicardo/devarchitect-ai/internal/detector"
 	"github.com/ValadezRicardo/devarchitect-ai/internal/report"
 	"github.com/ValadezRicardo/devarchitect-ai/internal/rules"
+	"github.com/ValadezRicardo/devarchitect-ai/internal/version"
 )
-
-// version is the CLI's release version. It is a build-time value in
-// tagged releases; "dev" marks a local/untagged build.
-var version = "0.1.0-dev"
 
 func main() {
 	os.Exit(run(os.Args[1:]))
@@ -30,7 +27,7 @@ func run(args []string) int {
 
 	switch args[0] {
 	case "version":
-		fmt.Printf("devarchitect version %s\n", version)
+		fmt.Printf("devarchitect version %s\n", version.Version)
 		return 0
 	case "analyze":
 		return runAnalyze(args[1:])
@@ -117,7 +114,7 @@ func runAnalyze(args []string) int {
 		return 1
 	}
 
-	result := analyzer.Run(ctx, repo, rules.DefaultRules(), version)
+	result := analyzer.Run(ctx, repo, rules.DefaultRules(), version.Version)
 	useJSON := opts.format == "json"
 
 	if opts.output == "" {

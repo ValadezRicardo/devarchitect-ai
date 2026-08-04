@@ -40,9 +40,11 @@ read outside the path the user authorized.
   symlinks, and about error handling for unreadable files/directories
   (permission errors are skipped, not fatal, so one unreadable subtree
   doesn't abort the whole scan — see `internal/detector/scan.go`).
-- Any future feature that would write output (e.g. `--output report.json`)
-  must write only to a path the user specifies outside the scanned tree by
-  default, never silently into the repository being analyzed.
+- Any feature that writes output — `--output <file>`, implemented in
+  Milestone 2 — must write only to a path the user specifies, and must
+  never overwrite an existing file silently (`cmd/devarchitect` enforces
+  this with `O_EXCL`); it does not, by itself, write into the repository
+  being analyzed unless the user explicitly points `--output` there.
 - Any future feature that shells out (e.g. to call `git`) must be
   explicitly and separately justified, since it is a deviation from "never
   execute code from the repository" — and must not execute anything
