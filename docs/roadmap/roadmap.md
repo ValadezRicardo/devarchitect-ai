@@ -96,29 +96,23 @@ that every later milestone builds on — before any scoring logic exists.
 - [x] `devarchitect version` and `devarchitect analyze .` both run
       successfully.
 - [x] Analysis is read-only and ignores common generated directories.
-- [x] `go fmt`, `go vet`, and `go test ./...` pass **locally**. Passing
-      **in CI** specifically was not verified through Milestones 0-2; the
-      workflow's trigger has since been corrected, but a successful
-      GitHub Actions run is not yet confirmed — see Risks.
+- [x] `go fmt`, `go vet`, and `go test ./...` pass **locally**, and, as of
+      2026-08-04, are confirmed passing **in CI** — see Risks for the
+      history of why that took a separate fix to verify.
 - [x] Foundational documentation and ADRs exist and are internally
       consistent.
 
-**Risks:** The CI workflow (`.github/workflows/ci.yml`) originally
-triggered on `branches: [main]`, while this repository's default branch
-is `master` — GitHub's Actions API showed zero runs of this workflow,
-ever, through Milestones 0-2 (verified via `gh api
-repos/.../actions/workflows`). Every "passes in CI" claim made in this
-project's documentation prior to that fix was, in fact, only verified
-locally. The trigger has since been corrected (branch
-`fix/github-actions-default-branch`) to target `master` and to allow
-manual runs via `workflow_dispatch`, but **a successful GitHub Actions
-run has not yet been observed** — this must be confirmed on that fix's
-own pull request before CI can be treated as operational anywhere in
-this documentation set. See
+**Risks:** None outstanding. The CI workflow (`.github/workflows/ci.yml`)
+originally triggered on `branches: [main]`, while this repository's
+default branch is `master` — GitHub's Actions API showed zero runs of
+this workflow, ever, through Milestones 0-2, and every "passes in CI"
+claim made in this project's documentation before the fix was, in fact,
+only verified locally. The trigger was corrected to target `master`
+(plus `workflow_dispatch`), and its first successful run was observed on
+[pull request #3](https://github.com/ValadezRicardo/devarchitect-ai/pull/3)
+(2026-08-04) — CI is now confirmed operational. See
 [docs/reviews/Milestone-0-foundation.md](../reviews/Milestone-0-foundation.md#known-risks)
-for the full finding and its follow-up note, and
-[CLAUDE.md](../../CLAUDE.md#suggested-future-improvements) for current
-status.
+for the full finding, its fix, and its confirmation.
 
 **Dependencies:** None — this is the project's starting point.
 

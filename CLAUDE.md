@@ -429,24 +429,15 @@ document is not aspirational, it describes the process already in use.
 Known gaps in this documentation/process set, worth a small future
 contribution:
 
-- **The CI workflow's trigger was fixed; a successful run is not yet
-  confirmed.** `.github/workflows/ci.yml` originally triggered on
-  `branches: [main]`, but this repository's default branch is `master` —
-  verified via the GitHub Actions API to have zero recorded runs, ever,
-  through Milestones 0-2 (see
-  [docs/reviews/Milestone-0-foundation.md](docs/reviews/Milestone-0-foundation.md#known-risks)
-  for the full finding). The trigger now targets `master` (plus
-  `workflow_dispatch`). **Until an actual GitHub Actions run is observed
-  succeeding — e.g. on the pull request that carries this fix — do not
-  treat CI as operational anywhere in this documentation set.**
 - **No automated import-boundary linter** enforcing
   [components.md](docs/architecture/components.md#dependency-rules) — the
   table is currently enforced by code review only. A `go list`-based CI
   check would close this gap.
 - **No automated broken-link checker** across this documentation set —
   cross-references are currently verified manually via a one-off script.
-  A markdown link-checker in CI would catch drift as documents evolve
-  (once the CI trigger defect above is fixed).
+  A markdown link-checker in CI would catch drift as documents evolve —
+  now practical to add, since CI is confirmed operational (see
+  [docs/reviews/Milestone-0-foundation.md](docs/reviews/Milestone-0-foundation.md#known-risks)).
 - **No formal `CODE_OF_CONDUCT.md`** yet — see
   [CONTRIBUTING.md](CONTRIBUTING.md#code-of-conduct), which flags this
   explicitly as pending.
