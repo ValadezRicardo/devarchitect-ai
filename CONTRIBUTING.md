@@ -74,16 +74,29 @@ CI runs the same checks on every pull request; a change that doesn't pass
 
 ## Proposing a new rule
 
-The rule engine (`internal/rules`, `internal/scoring`) is not implemented
-yet — see [ADR-004](docs/adr/ADR-004-modular-rule-engine.md) for the
-`Rule` interface it will be built on. If you have an idea for a rule,
-please open an issue using the
+The rule engine lives in `internal/rules` (implementations) and
+`internal/scoring` (aggregation) — see
+[ADR-004](docs/adr/ADR-004-modular-rule-engine.md) for the `domain.Rule`
+interface and [ADR-005](docs/adr/ADR-005-transparent-deterministic-scoring.md)
+for how scoring works. Adding a rule means:
+
+1. Writing a type that implements `domain.Rule` in the file for its
+   category (e.g. `internal/rules/documentation.go`), following the
+   existing rules as a template — use the `passed`/`failed`/`skipped`
+   helpers in `internal/rules/helpers.go` rather than constructing a
+   `domain.RuleResult` by hand.
+2. Registering it in `DefaultRules()` (`internal/rules/registry.go`).
+3. Adding a table-driven test (see `internal/rules/*_test.go`) covering
+   at least a passing and a failing case.
+
+Every rule must be evidence-based (point to a specific, verifiable fact
+about the repository, surfaced in `Evidence`) and must not duplicate what
+specialized tools like SonarQube, Semgrep, or CodeQL already do well —
+DevArchitect AI's job is unification and governance, not deep static
+analysis. If you have an idea for a rule but aren't ready to implement it,
+open an issue using the
 [new rule template](.github/ISSUE_TEMPLATE/new_rule.md) so it can be
-tracked and discussed before the engine lands. Every rule must be
-evidence-based (point to a specific, verifiable fact about the repository)
-and must not duplicate what specialized tools like SonarQube, Semgrep, or
-CodeQL already do well — DevArchitect AI's job is unification and
-governance, not deep static analysis.
+discussed first.
 
 ## Reporting bugs
 

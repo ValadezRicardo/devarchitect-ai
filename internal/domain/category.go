@@ -16,3 +16,20 @@ const (
 	CategoryArchitectureFoundations Category = "architecture_foundations"
 	CategoryAIReadiness             Category = "ai_readiness"
 )
+
+// AllCategories returns every known category in a fixed, canonical order.
+// The scoring engine iterates this slice (rather than deriving order from
+// map keys or from whichever findings happen to exist) so that category
+// ordering in reports is deterministic and every category is always shown,
+// even one with a score of 0.
+func AllCategories() []Category {
+	return []Category{
+		CategoryDocumentation,
+		CategoryTesting,
+		CategoryDevOps,
+		CategoryRepositoryHygiene,
+		CategorySecurityFoundations,
+		CategoryArchitectureFoundations,
+		CategoryAIReadiness,
+	}
+}
