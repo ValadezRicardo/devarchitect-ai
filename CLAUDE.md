@@ -27,6 +27,7 @@ links; they are not optional footnotes.
 - [What Never to Do](#what-never-to-do)
 - [Compatibility](#compatibility)
 - [Roadmap](#roadmap)
+- [Release Process](#release-process)
 - [Quality Criteria](#quality-criteria)
 - [Workflow](#workflow)
 - [Suggested Future Improvements](#suggested-future-improvements)
@@ -373,10 +374,11 @@ and [Stable APIs](docs/vision/design-principles.md#stable-apis).
 ## Roadmap
 
 Ten milestones, 0 through 9, from Foundation through Enterprise Edition.
-Milestones 0, 1, and 2 are **Completed**. Milestone 3 (Engineering
-Policies) is **In Design** — see
-[RFC-001](docs/rfc/RFC-001-engineering-policies.md). Full detail,
-including exit criteria, risks, and status for each:
+**The Foundation Phase (Milestones 0, 1, and 2) is Completed** as of
+release [v0.2.0](docs/releases/v0.2.0.md). Milestone 3 (Engineering
+Policies) has its RFC ([RFC-001](docs/rfc/RFC-001-engineering-policies.md))
+Accepted and is **Ready to Start**. Full detail, including exit criteria,
+risks, and status for each milestone:
 [docs/roadmap/roadmap.md](docs/roadmap/roadmap.md) — treat that document,
 not this summary, as authoritative if they ever diverge.
 
@@ -384,6 +386,76 @@ Any implementation work should be traceable to a specific milestone. Work
 that doesn't fit any milestone listed there is a signal to update the
 roadmap first (via a small PR or, for anything contentious, an RFC), not
 to build it unplanned.
+
+## Release Process
+
+DevArchitect AI does not yet have automated release tooling (see
+[Governance — Releases](docs/governance/governance.md#releases)) — a
+release is a deliberate, checklist-driven process, not a script. The
+authoritative, reusable checklist is
+[docs/releases/release-checklist.md](docs/releases/release-checklist.md);
+this section is the narrative walkthrough of using it, established while
+preparing [v0.2.0](docs/releases/v0.2.0.md).
+
+1. **Confirm the phase is actually complete.** A release marks a
+   milestone (or a phase of milestones) as `Completed` in the roadmap —
+   don't prepare a release for work that's still `In Progress`.
+2. **Bump the version constant.** Update `Version` in
+   [internal/version/version.go](internal/version/version.go) — the
+   single source of truth `devarchitect version` and every
+   `AnalysisReport.Metadata.ToolVersion` read from. Never hardcode the
+   version string anywhere else; if you find one, replace it with a
+   reference to this constant instead (see
+   [ADR-001](docs/adr/ADR-001-use-go.md) for why the CLI avoids exactly
+   this kind of duplication).
+3. **Review the documents that must agree with reality**: README (status
+   banner, current status, roadmap summary), this file's own [Roadmap](#roadmap)
+   section, every RFC targeting what shipped (must be `Accepted` and
+   implemented, or explicitly out of scope), every ADR for a decision
+   made during the cycle, and a [review](docs/reviews/README.md) for each
+   completed milestone/sprint.
+4. **Run the full validation suite**: `gofmt -l .`, `go build ./...`,
+   `go vet ./...`, `go test ./...`, `go test -race ./...`,
+   `go run ./cmd/devarchitect version` (confirm it reports the new
+   version), and `go run ./cmd/devarchitect analyze .` — confirm no
+   unintended functional change, no score change, no output change
+   versus the prior release, per [Quality Criteria](#quality-criteria)
+   below.
+5. **Generate the CHANGELOG entry.** Add a new `## [X.Y.Z] - YYYY-MM-DD`
+   section to [CHANGELOG.md](CHANGELOG.md) in [Keep a
+   Changelog](https://keepachangelog.com/) format
+   (Added/Changed/Fixed/Documentation/Infrastructure) — list only what
+   actually exists in the repository, never an aspirational entry.
+6. **Generate the Release Notes.** Create
+   `docs/releases/vX.Y.Z.md` following the structure established by
+   [v0.2.0.md](docs/releases/v0.2.0.md) (Overview, Highlights,
+   Architecture, Engineering, Documentation, Governance, Testing,
+   Continuous Integration, Known Limitations, Roadmap, Next Milestone) —
+   write it so it can be pasted directly into the GitHub Release
+   description with no further editing.
+7. **Create the Tag**, once everything above is merged to `master`:
+   ```bash
+   git checkout master
+   git pull origin master
+   git tag -a vX.Y.Z -m "One-line description"
+   git push origin vX.Y.Z
+   ```
+   Always an annotated tag (`-a`), never lightweight — see the [release
+   checklist](docs/releases/release-checklist.md)'s Tag item.
+8. **Publish the Release** from GitHub (Releases → Draft a new release →
+   select the pushed tag), pasting the `docs/releases/vX.Y.Z.md` content
+   as the release body verbatim.
+9. **Close the milestone(s)** the release completes: confirm their
+   [roadmap](docs/roadmap/roadmap.md) entries say `Completed`, and that
+   no exit criterion is left unchecked without an explanation.
+10. **Start the next milestone**: update the roadmap's phase framing (see
+    the note pattern used for the Foundation Phase in this file's
+    [Roadmap](#roadmap) section) to name the new current milestone and its
+    status — `Ready to Start` once its RFC is Accepted, `In Design` while
+    the RFC is still being written.
+11. Run [Post-release validation](docs/releases/release-checklist.md) and
+    record [Lessons Learned](docs/releases/release-checklist.md) per the
+    checklist's closing items.
 
 ## Quality Criteria
 
@@ -460,4 +532,5 @@ contribution:
 - [Personas](docs/product/personas.md) · [Use cases](docs/product/use-cases.md)
 - [RFC process](docs/rfc/README.md) · [RFC-001: Engineering Policies](docs/rfc/RFC-001-engineering-policies.md)
 - [ADRs](docs/adr/) · [Reviews](docs/reviews/README.md)
+- [CHANGELOG](CHANGELOG.md) · [Release checklist](docs/releases/release-checklist.md) · [v0.2.0 release notes](docs/releases/v0.2.0.md)
 - [README](README.md) · [CONTRIBUTING](CONTRIBUTING.md)

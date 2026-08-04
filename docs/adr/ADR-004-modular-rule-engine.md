@@ -2,8 +2,13 @@
 
 ## Status
 
-Accepted (interface only — the engine that runs rules and aggregates
-scores is not implemented yet; see "Consequences" below)
+Accepted, and fully implemented as of Milestone 2 (`internal/rules`,
+`internal/scoring`, `internal/analyzer` — see
+[ADR-005](ADR-005-transparent-deterministic-scoring.md) for the scoring
+side of that work). This ADR's Context, Decision, and Consequences below
+are preserved as originally written at Milestone 0, when only the `Rule`
+interface existed — see the note at the end of "Consequences" for what
+changed as the engine was actually built.
 
 ## Context
 
@@ -63,6 +68,17 @@ scores. Neither the registry nor the scoring aggregator exists yet.
 - A plugin/external-rule mechanism (rules loaded from outside this
   repository) is a natural extension of this interface but is not
   designed or implemented yet.
+
+**Update (Milestone 2):** the registry (`internal/rules.DefaultRules`),
+scoring aggregator (`internal/scoring`), and 17 built-in rules described
+as future work above now exist. The `Rule` interface itself evolved
+slightly from the sketch in this ADR's Decision: `Evaluate` returns a
+`RuleResult`, not a `Finding` directly, so that a rule can never report
+an ID or score inconsistent with its own declared metadata — see the
+design note in `internal/domain/rule.go`. The interface's *shape*
+(small, self-contained, evidence-producing units, unaware of the file
+system) held exactly as decided here; only this one mechanical detail
+changed during implementation.
 
 ## Alternatives considered
 

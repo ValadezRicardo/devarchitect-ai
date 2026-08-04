@@ -3,6 +3,7 @@
 ## Table of contents
 
 - [How to read this roadmap](#how-to-read-this-roadmap)
+- [Current status](#current-status)
 - [Status values](#status-values)
 - [Milestone 0 — Foundation](#milestone-0--foundation)
 - [Milestone 1 — Repository Scanner](#milestone-1--repository-scanner)
@@ -51,6 +52,32 @@ keep separate identities in this roadmap because they are conceptually
 distinct layers (see [architecture/overview.md](../architecture/overview.md))
 and may not always move together in the future (e.g. the scanner gaining
 new detection capability independent of any scoring change).
+
+## Current status
+
+> **Milestone 0 — Foundation: Completed.**
+> **Milestone 1 — Repository Scanner: Completed.**
+> **Milestone 2 — Engineering Rules & Score: Completed.**
+> **Foundation Phase: Completed** — released as
+> [v0.2.0](../releases/v0.2.0.md).
+>
+> **Current phase:** Milestone 3 — Engineering Policies.
+> **Status: Ready to Start** — its design,
+> [RFC-001](../rfc/RFC-001-engineering-policies.md), is Accepted;
+> implementation has not yet begun.
+
+"Ready to Start" is a plain-language summary, not a sixth value added to
+the [Status values](#status-values) vocabulary below: Milestone 3's
+formal status remains **In Design** until an implementation pull request
+actually lands, at which point it moves to **In Progress** — "Ready to
+Start" simply means the blocker for that transition (an Accepted RFC) is
+already cleared. This note summarizes the individual milestone entries
+below, which remain the authoritative, detailed record for each
+milestone's own Vision, Objective, Deliverables, Exit Criteria, Risks,
+Dependencies, and formal [Status](#status-values) — see [Milestone
+0](#milestone-0--foundation), [Milestone 1](#milestone-1--repository-scanner),
+[Milestone 2](#milestone-2--engineering-rules--score), and [Milestone
+3](#milestone-3--engineering-policies).
 
 ## Status values
 

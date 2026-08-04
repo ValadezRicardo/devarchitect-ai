@@ -2,11 +2,12 @@
 
 **The Open Source Engineering Excellence Platform.**
 
-> ⚠️ **Active development.** DevArchitect AI is early in its roadmap
-> (through Milestone 2 — Engineering Rules & Score; see
-> [docs/roadmap/roadmap.md](docs/roadmap/roadmap.md)). The CLI, its
-> commands, its scoring rules, and its output format are all subject to
-> change without notice. Do not build automation on top of it yet.
+> ⚠️ **Active development.** DevArchitect AI has completed its Foundation
+> phase ([v0.2.0](docs/releases/v0.2.0.md) — Milestones 0-2; see
+> [docs/roadmap/roadmap.md](docs/roadmap/roadmap.md)) and is preparing
+> Milestone 3. The CLI, its commands, its scoring rules, and its output
+> format are all still subject to change without notice pre-1.0. Do not
+> build automation on top of it yet.
 
 ## What it is
 
@@ -32,8 +33,9 @@ any account, server, or network connection.
 ## Current status
 
 This repository currently implements **Milestones 0-2** (Foundation,
-Repository Scanner, Engineering Rules & Score — see the
-[Roadmap](docs/roadmap/roadmap.md)):
+Repository Scanner, Engineering Rules & Score), released as
+[v0.2.0 — "Foundation Complete"](docs/releases/v0.2.0.md) — see the
+[Roadmap](docs/roadmap/roadmap.md):
 
 - A working CLI: `devarchitect version`, `devarchitect analyze <path>`,
   with `--format terminal|json` and `--output <file>`.
@@ -255,7 +257,8 @@ terminology, the RFC process, and retrospective reviews — lives under
 ties it together for anyone implementing change in this project. Start
 with [docs/governance/decision-hierarchy.md](docs/governance/decision-hierarchy.md)
 if you're trying to understand how any of these documents relate to each
-other.
+other. See [CHANGELOG.md](CHANGELOG.md) for what changed in each release
+and [docs/releases/](docs/releases/) for full release notes.
 
 ## Contributing
 
