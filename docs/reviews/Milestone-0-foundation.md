@@ -102,6 +102,19 @@ GitHub issue/PR templates, and ADR-001 through ADR-004.
   claim CI is operational. Until that confirmation exists, continue
   treating local `make check` / `go test` output as the only verified
   gate (see [CONTRIBUTING.md](../../CONTRIBUTING.md#running-checks-locally)).
+
+  **Confirmed (2026-08-04):** the `build-and-test` check ran and passed
+  on [pull request #3](https://github.com/ValadezRicardo/devarchitect-ai/pull/3)
+  — the [workflow run](https://github.com/ValadezRicardo/devarchitect-ai/actions/runs/30898867102)
+  is the first successful GitHub Actions execution in this repository's
+  history. PR #3 was merged to `master` as commit `89d0da8`. CI is now
+  operational for pushes and pull requests targeting `master`, and this
+  is the closing entry for this finding — the risk that motivated it is
+  resolved. It is left in place, unedited above, as the historical
+  record of what was found and how it was fixed; see
+  [CLAUDE.md](../../CLAUDE.md#suggested-future-improvements) and
+  [CONTRIBUTING.md](../../CONTRIBUTING.md#running-checks-locally) for
+  the corresponding current-state statements.
 - `SECURITY.md` still does not exist in this repository as of this
   review — flagged as a real gap in
   [Governance](../governance/governance.md#security-disclosure) and

@@ -40,16 +40,15 @@ go vet ./...
 go test ./... -v
 ```
 
-CI is configured (`.github/workflows/ci.yml`) to run the same checks on
-every pull request. **Status:** the workflow originally triggered on
-`branches: [main]` while this repository's default branch is `master`,
-so it never actually ran on any push or pull request through Milestones
-0-2 — see
+CI runs the same checks on every pull request
+(`.github/workflows/ci.yml`) and is confirmed operational: its first
+successful run was on
+[pull request #3](https://github.com/ValadezRicardo/devarchitect-ai/pull/3)
+(2026-08-04), after correcting a trigger that had targeted `main` while
+this repository's default branch is `master` — a change that doesn't
+pass `make check` locally won't pass CI either. See
 [docs/reviews/Milestone-0-foundation.md](docs/reviews/Milestone-0-foundation.md#known-risks)
-for the full finding. The trigger was corrected to `master` (plus
-`workflow_dispatch`) in a later maintenance change, but a successful
-GitHub Actions run has not yet been observed and confirmed. Until that
-confirmation exists, treat `make check` as the only verified gate.
+for the full history of that finding and its fix.
 
 ## Conventions
 
