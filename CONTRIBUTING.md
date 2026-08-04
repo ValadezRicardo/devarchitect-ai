@@ -41,12 +41,15 @@ go test ./... -v
 ```
 
 CI is configured (`.github/workflows/ci.yml`) to run the same checks on
-every pull request. **Known issue:** that workflow currently triggers on
-`branches: [main]`, while this repository's default branch is `master`
-— as a result it has not actually run on any push or pull request to
-date (see
-[docs/reviews/Milestone-0-foundation.md](docs/reviews/Milestone-0-foundation.md#known-risks)).
-Until that's fixed, treat `make check` as the only verified gate.
+every pull request. **Status:** the workflow originally triggered on
+`branches: [main]` while this repository's default branch is `master`,
+so it never actually ran on any push or pull request through Milestones
+0-2 — see
+[docs/reviews/Milestone-0-foundation.md](docs/reviews/Milestone-0-foundation.md#known-risks)
+for the full finding. The trigger was corrected to `master` (plus
+`workflow_dispatch`) in a later maintenance change, but a successful
+GitHub Actions run has not yet been observed and confirmed. Until that
+confirmation exists, treat `make check` as the only verified gate.
 
 ## Conventions
 

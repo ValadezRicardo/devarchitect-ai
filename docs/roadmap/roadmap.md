@@ -97,22 +97,28 @@ that every later milestone builds on — before any scoring logic exists.
       successfully.
 - [x] Analysis is read-only and ignores common generated directories.
 - [x] `go fmt`, `go vet`, and `go test ./...` pass **locally**. Passing
-      **in CI** specifically is not yet verified — see Risks.
+      **in CI** specifically was not verified through Milestones 0-2; the
+      workflow's trigger has since been corrected, but a successful
+      GitHub Actions run is not yet confirmed — see Risks.
 - [x] Foundational documentation and ADRs exist and are internally
       consistent.
 
-**Risks:** The CI workflow (`.github/workflows/ci.yml`) triggers on
-`branches: [main]`, but this repository's default branch is `master` —
-as of this writing, GitHub's Actions API shows zero runs of this
-workflow, ever, on this repository (verified via `gh api
+**Risks:** The CI workflow (`.github/workflows/ci.yml`) originally
+triggered on `branches: [main]`, while this repository's default branch
+is `master` — GitHub's Actions API showed zero runs of this workflow,
+ever, through Milestones 0-2 (verified via `gh api
 repos/.../actions/workflows`). Every "passes in CI" claim made in this
-project's documentation to date has actually only been verified locally.
-Fixing the trigger is a small, low-risk change, but is outside this
-documentation sprint's scope — see
+project's documentation prior to that fix was, in fact, only verified
+locally. The trigger has since been corrected (branch
+`fix/github-actions-default-branch`) to target `master` and to allow
+manual runs via `workflow_dispatch`, but **a successful GitHub Actions
+run has not yet been observed** — this must be confirmed on that fix's
+own pull request before CI can be treated as operational anywhere in
+this documentation set. See
 [docs/reviews/Milestone-0-foundation.md](../reviews/Milestone-0-foundation.md#known-risks)
-for the full finding and
-[CLAUDE.md](../../CLAUDE.md#suggested-future-improvements) for the
-follow-up.
+for the full finding and its follow-up note, and
+[CLAUDE.md](../../CLAUDE.md#suggested-future-improvements) for current
+status.
 
 **Dependencies:** None — this is the project's starting point.
 
