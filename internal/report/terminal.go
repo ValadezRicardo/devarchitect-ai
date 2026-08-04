@@ -1,48 +1,92 @@
 // Package report renders analysis results for human consumption. It has no
-// knowledge of how a domain.Repository was produced, keeping detection
-// logic independent of presentation (see ADR-004 and product spec
+// knowledge of how a domain.AnalysisReport was produced, keeping the
+// engine independent of presentation (see ADR-004 and product spec
 // section 5).
 package report
 
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/ValadezRicardo/devarchitect-ai/internal/domain"
 )
 
-// RenderTerminal writes a plain-text summary of repo to w. It intentionally
-// avoids colors, boxes, or spinners: the goal is clarity and compatibility,
-// not decoration (product spec section 4.5).
-//
-// The scoring engine (categories, findings, recommendations) is not
-// implemented yet — that lands in Milestone 2 — so this report only
-// presents the facts the detector observed.
-func RenderTerminal(w io.Writer, repo domain.Repository) {
+// maxTerminalRecommendations caps how many recommendations the terminal
+// report prints; the full list is always available in the JSON report
+// (product spec: "Muestra como máximo cinco recomendaciones principales").
+const maxTerminalRecommendations = 5
+
+var categoryDisplayNames = map[domain.Category]string{
+	domain.CategoryDocumentation:           "Documentation",
+	domain.CategoryTesting:                 "Testing",
+	domain.CategoryDevOps:                  "DevOps",
+	domain.CategoryRepositoryHygiene:       "Repository Hygiene",
+	domain.CategorySecurityFoundations:     "Security Foundations",
+	domain.CategoryArchitectureFoundations: "Architecture Foundations",
+	domain.CategoryAIReadiness:             "AI Readiness",
+}
+
+var statusLabels = map[domain.Status]string{
+	domain.StatusPassed:  "PASS",
+	domain.StatusFailed:  "FAIL",
+	domain.StatusSkipped: "SKIP",
+	domain.StatusError:   "ERROR",
+}
+
+// RenderTerminal writes a plain-text summary of report to w. It
+// intentionally avoids colors, boxes, or spinners: the goal is clarity and
+// compatibility, not decoration (product spec section 4.5). Status is
+// conveyed with text labels (PASS/FAIL/SKIP/ERROR), not color, so the
+// output stays meaningful without a terminal that supports it.
+func RenderTerminal(w io.Writer, report domain.AnalysisReport) {
+	repo := report.Repository
+
 	fmt.Fprintln(w, "DevArchitect AI")
 	fmt.Fprintln(w)
 	fmt.Fprintf(w, "Repository: %s\n", repo.Name)
 	fmt.Fprintf(w, "Path: %s\n", repo.Path)
-	fmt.Fprintf(w, "Files scanned: %d\n", repo.FileCount)
-	fmt.Fprintf(w, "README detected: %s\n", yesNo(repo.HasReadme))
+	fmt.Fprintf(w, "Files analyzed: %d\n", repo.FileCount)
+	fmt.Fprintf(w, "Languages: %s\n", languageSummary(repo.Languages))
 	fmt.Fprintln(w)
 
-	fmt.Fprintln(w, "Languages")
-	if len(repo.Languages) == 0 {
-		fmt.Fprintln(w, "  No recognized source files found")
-	} else {
-		for _, lang := range repo.Languages {
-			fmt.Fprintf(w, "  %-15s %d files\n", lang.Name, lang.FileCount)
+	fmt.Fprintf(w, "Overall Score: %d/100\n", report.Summary.OverallScore)
+	fmt.Fprintln(w)
+
+	fmt.Fprintln(w, "Categories")
+	fmt.Fprintln(w)
+	for _, c := range report.CategoryScores {
+		fmt.Fprintf(w, "%-28s %3d/100\n", categoryDisplayNames[c.Category], c.Percentage)
+	}
+	fmt.Fprintln(w)
+
+	fmt.Fprintln(w, "Findings")
+	fmt.Fprintln(w)
+	for _, f := range report.Findings {
+		fmt.Fprintf(w, "%-5s %-10s %s\n", statusLabels[f.Status], f.ID, f.Title)
+	}
+	fmt.Fprintln(w)
+
+	if len(report.Recommendations) > 0 {
+		fmt.Fprintln(w, "Top Recommendations")
+		fmt.Fprintln(w)
+		n := len(report.Recommendations)
+		if n > maxTerminalRecommendations {
+			n = maxTerminalRecommendations
+		}
+		for i := 0; i < n; i++ {
+			fmt.Fprintf(w, "%d. %s\n", i+1, report.Recommendations[i])
 		}
 	}
-	fmt.Fprintln(w)
-
-	fmt.Fprintln(w, "Note: scoring, findings, and recommendations are not yet implemented.")
 }
 
-func yesNo(v bool) string {
-	if v {
-		return "yes"
+func languageSummary(languages []domain.Language) string {
+	if len(languages) == 0 {
+		return "none detected"
 	}
-	return "no"
+	names := make([]string, len(languages))
+	for i, l := range languages {
+		names[i] = l.Name
+	}
+	return strings.Join(names, ", ")
 }
