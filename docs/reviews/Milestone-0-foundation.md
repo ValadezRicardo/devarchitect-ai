@@ -87,6 +87,21 @@ GitHub issue/PR templates, and ADR-001 through ADR-004.
   documentation-only scope) — see
   [CLAUDE.md](../../CLAUDE.md#suggested-future-improvements) for the
   recommended follow-up.
+
+  **Follow-up (branch `fix/github-actions-default-branch`):** the
+  workflow file itself is corrected — `.github/workflows/ci.yml` now
+  triggers on `branches: [master]` (plus `workflow_dispatch` for manual
+  runs) instead of `main`. This entry is preserved as originally written
+  above and not rewritten: the finding was real, the workflow genuinely
+  never ran during Milestones 0-2 or Sprint 0/0.1, and this correction
+  happened in a separate, later maintenance change, not retroactively.
+  **The fix corrects the trigger configuration; it does not yet
+  constitute proof the workflow runs successfully.** That must still be
+  confirmed by observing an actual GitHub Actions run — e.g. the check
+  run attached to this fix's own pull request — before any document may
+  claim CI is operational. Until that confirmation exists, continue
+  treating local `make check` / `go test` output as the only verified
+  gate (see [CONTRIBUTING.md](../../CONTRIBUTING.md#running-checks-locally)).
 - `SECURITY.md` still does not exist in this repository as of this
   review — flagged as a real gap in
   [Governance](../governance/governance.md#security-disclosure) and
