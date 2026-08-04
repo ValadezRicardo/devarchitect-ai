@@ -3,9 +3,10 @@
 **The Open Source Engineering Excellence Platform.**
 
 > ⚠️ **Active development.** DevArchitect AI is early in its roadmap
-> (Milestone 1 — Engineering Score). The CLI, its commands, its scoring
-> rules, and its output format are all subject to change without notice.
-> Do not build automation on top of it yet.
+> (through Milestone 2 — Engineering Rules & Score; see
+> [docs/roadmap/roadmap.md](docs/roadmap/roadmap.md)). The CLI, its
+> commands, its scoring rules, and its output format are all subject to
+> change without notice. Do not build automation on top of it yet.
 
 ## What it is
 
@@ -30,7 +31,9 @@ any account, server, or network connection.
 
 ## Current status
 
-This repository currently implements **Milestone 1 — Engineering Score**:
+This repository currently implements **Milestones 0-2** (Foundation,
+Repository Scanner, Engineering Rules & Score — see the
+[Roadmap](docs/roadmap/roadmap.md)):
 
 - A working CLI: `devarchitect version`, `devarchitect analyze <path>`,
   with `--format terminal|json` and `--output <file>`.
@@ -44,7 +47,10 @@ This repository currently implements **Milestone 1 — Engineering Score**:
 
 **Not implemented yet:** `.devarchitect.yml` configuration and custom
 policies, CI-friendly exit-code thresholds, and any AI-assisted features.
-See [Limitations](#known-limitations) and [Roadmap](#roadmap).
+The design for the next of these —
+[Engineering Policies](docs/rfc/RFC-001-engineering-policies.md) — has
+been Accepted by the Architecture Review Board; implementation has not
+started. See [Limitations](#known-limitations) and [Roadmap](#roadmap).
 
 ## Installation
 
@@ -225,22 +231,31 @@ Detection, rule evaluation, scoring, and rendering are deliberately kept as
 separate layers so each can be tested independently and so new rules can be
 added without touching the CLI or the scanner. See the [ADRs](docs/adr/)
 for the reasoning behind these boundaries, and
-[docs/architecture](docs/architecture) for deeper notes as they're written.
+[docs/architecture/overview.md](docs/architecture/overview.md) for full
+data-flow and dependency diagrams, and
+[docs/architecture/components.md](docs/architecture/components.md) for
+each package's exact contract.
 
 ## Roadmap
 
-- [x] **Milestone 0 — Foundation**: repo structure, CLI, docs, CI, domain
-      model, basic scan + terminal report.
-- [x] **Milestone 1 — Engineering Score**: the rule engine, per-category
-      scoring, evidence-based findings, recommendations, JSON output.
-- [ ] **Milestone 2 — Broader Repository Scan**: additional relevant-file
-      detection, framework detection.
-- [ ] **Milestone 3 — COE Standards**: `.devarchitect.yml`, custom
-      policies, thresholds, CI-friendly exit codes.
-- [ ] **Milestone 4 — AI Assistance**: optional, decoupled AI providers
-      that explain findings and suggest improvement plans.
-- [ ] **Milestone 5 — Integrations**: GitHub Actions, GitLab CI, Azure
-      DevOps, issue export, HTML reports.
+Milestones 0 (Foundation), 1 (Repository Scanner), and 2 (Engineering
+Rules & Score) are done — this repository is the result. The full
+roadmap, including objectives, acceptance criteria, and status for every
+milestone through Milestone 9 (Enterprise Edition), lives in
+[docs/roadmap/roadmap.md](docs/roadmap/roadmap.md) and is the
+authoritative source — this section intentionally doesn't duplicate it.
+
+## Documentation
+
+This README covers day-to-day usage. The full documentation set — vision,
+philosophy, architecture diagrams, engineering standards, product
+personas and use cases, governance and decision-making process, official
+terminology, the RFC process, and retrospective reviews — lives under
+[`docs/`](docs/), and [CLAUDE.md](CLAUDE.md) is the operating manual that
+ties it together for anyone implementing change in this project. Start
+with [docs/governance/decision-hierarchy.md](docs/governance/decision-hierarchy.md)
+if you're trying to understand how any of these documents relate to each
+other.
 
 ## Contributing
 

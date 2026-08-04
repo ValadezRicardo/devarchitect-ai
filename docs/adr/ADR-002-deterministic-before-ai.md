@@ -37,7 +37,9 @@ content or scores.
 - The tool is slower to gain "soft" judgment (e.g. assessing whether
   architecture documentation is actually good, not just present) than an
   LLM-first design would be. That capability is deferred to the optional AI
-  explanation layer (Milestone 4) rather than baked into scoring.
+  explanation layer (Milestone 6 — AI Assistance; see
+  [docs/roadmap/roadmap.md](../roadmap/roadmap.md)) rather than baked into
+  scoring.
 
 ## Alternatives considered
 

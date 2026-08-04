@@ -6,7 +6,9 @@ Accepted
 
 ## Context
 
-Milestone 1 adds DevArchitect AI's first real scoring engine: 17 rules
+Milestone 2 (Engineering Rules & Score; see
+[docs/roadmap/roadmap.md](../roadmap/roadmap.md)) adds DevArchitect AI's
+first real scoring engine: 17 rules
 across 7 categories, each contributing points toward a category score and
 an overall score. Once a tool produces a number like "78/100" for a
 repository, that number will be used to make decisions — a COE might set a
@@ -62,7 +64,7 @@ text of README.md/ARCHITECTURE.md). No LLM, embedding, or external API is
 consulted to decide a Status, a Score, or a recommendation. This continues
 the decision made in ADR-002 and is not revisited here — see that ADR for
 the full reasoning (reproducibility, offline operation, auditability).
-What Milestone 1 adds on top of ADR-002 is the concrete mechanism: every
+What Milestone 2 adds on top of ADR-002 is the concrete mechanism: every
 number in a report can be traced to a specific rule's `Evidence` string,
 which itself names a specific file or path the user can go look at.
 
@@ -96,7 +98,7 @@ which itself names a specific file or path the user can go look at.
 - **Use an LLM to holistically score a repository's documentation/testing
   "quality"**: rejected for the reasons in ADR-002 — non-reproducible,
   requires network access, not auditable. Nothing here prevents an
-  `AIProvider` (Milestone 4) from later *explaining* a deterministic score
+  `AIProvider` (Milestone 6) from later *explaining* a deterministic score
   in natural language; it still may not determine the score itself.
 
 ## Consequences
