@@ -1,8 +1,17 @@
 # Contributing to DevArchitect AI
 
-Thanks for your interest in contributing. This project is in active,
-early-stage development (Milestone 0), so expect the codebase and
-conventions here to evolve.
+Thanks for your interest in contributing. This project is in active
+development — see [docs/roadmap/roadmap.md](docs/roadmap/roadmap.md) for
+current status — so expect the codebase and conventions here to evolve.
+Before your first contribution, read [CLAUDE.md](CLAUDE.md): it's the
+project's operating manual and applies to every contributor, not only AI
+agents. For anything bigger than a small fix, also read
+[docs/governance/decision-hierarchy.md](docs/governance/decision-hierarchy.md)
+to understand whether your change needs an RFC, an ADR, or just a pull
+request — [RFC-001](docs/rfc/RFC-001-engineering-policies.md) is a
+current, real, `Accepted` example if you want to see the process in
+action, including what an Architecture Review Board approval record
+looks like.
 
 ## Setting up your environment
 
@@ -31,46 +40,46 @@ go vet ./...
 go test ./... -v
 ```
 
-CI runs the same checks on every pull request; a change that doesn't pass
-`make check` locally won't pass CI either.
+CI is configured (`.github/workflows/ci.yml`) to run the same checks on
+every pull request. **Known issue:** that workflow currently triggers on
+`branches: [main]`, while this repository's default branch is `master`
+— as a result it has not actually run on any push or pull request to
+date (see
+[docs/reviews/Milestone-0-foundation.md](docs/reviews/Milestone-0-foundation.md#known-risks)).
+Until that's fixed, treat `make check` as the only verified gate.
 
 ## Conventions
 
-- Keep functions small and focused; prefer clear names over comments.
-- Handle errors explicitly — no ignored errors, no panics for expected
-  failure modes (missing files, bad input, etc.).
-- Use `context.Context` for any operation that walks the file system or
-  could be long-running.
+Full conventions live in
+[docs/engineering/coding-standards.md](docs/engineering/coding-standards.md).
+The two most consequential ones for any change:
+
 - Analysis code must stay read-only: never write to, modify, or execute
   anything inside a repository being analyzed (see
   [ADR-003](docs/adr/ADR-003-local-first-read-only.md)).
 - Before adding a third-party dependency, explain in the PR description:
   what problem it solves, why the standard library isn't enough, its
-  license, and its maintenance risk. The MVP intentionally has zero
-  external dependencies.
-- New packages under `internal/` should have a package-level doc comment
-  explaining their responsibility and how it's kept separate from
-  neighboring packages.
+  license, and its maintenance risk. The project intentionally has zero
+  external dependencies today.
 
 ## Branching and commits
 
-- Branch from `main`, one focused change per branch/PR.
+- Branch from `master`, one focused change per branch/PR.
 - Use short, descriptive branch names, e.g. `detector/ignore-symlinks`.
 - Commit messages: imperative mood, explain *why* when it's not obvious
   from the diff (e.g. `Skip symlinks in scanner to avoid escaping repo
   root`, not `fix bug`).
 - Keep PRs small enough to review in one sitting. Large, unrelated changes
   will be asked to split.
+- See [docs/engineering/pull-requests.md](docs/engineering/pull-requests.md)
+  for the full process and review checklist.
 
 ## Tests
 
-- New behavior needs a test. Bug fixes should include a test that would
-  have failed before the fix.
-- Fixture repositories used by tests live under `testdata/`; add new
-  fixtures there rather than creating temp directories at test time when a
-  static fixture will do.
-- Package-level tests live alongside the code they test
-  (`internal/detector/scan_test.go`, etc.).
+New behavior needs a test that would fail without it; bug fixes need a
+test that would have failed before the fix. Full testing strategy,
+coverage expectations, and fixture conventions:
+[docs/engineering/testing.md](docs/engineering/testing.md).
 
 ## Proposing a new rule
 
@@ -89,6 +98,9 @@ for how scoring works. Adding a rule means:
 3. Adding a table-driven test (see `internal/rules/*_test.go`) covering
    at least a passing and a failing case.
 
+Use the terms defined in
+[docs/vision/glossary.md](docs/vision/glossary.md) precisely — a Rule,
+Finding, and Evidence mean specific, distinct things in this project.
 Every rule must be evidence-based (point to a specific, verifiable fact
 about the repository, surfaced in `Evidence`) and must not duplicate what
 specialized tools like SonarQube, Semgrep, or CodeQL already do well —
@@ -96,7 +108,8 @@ DevArchitect AI's job is unification and governance, not deep static
 analysis. If you have an idea for a rule but aren't ready to implement it,
 open an issue using the
 [new rule template](.github/ISSUE_TEMPLATE/new_rule.md) so it can be
-discussed first.
+discussed first. See [CLAUDE.md](CLAUDE.md#how-to-write-rules) for the
+full, step-by-step guide.
 
 ## Reporting bugs
 
